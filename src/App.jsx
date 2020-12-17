@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { BrowserRouter as Router } from 'react-router-dom'
 
-import Routes from './Routes'
+import Routes from './Routes/Routes'
 
 const GlobalStyles = createGlobalStyle`
     *{
