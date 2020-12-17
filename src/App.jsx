@@ -1,35 +1,18 @@
 import React from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
+
 import { BrowserRouter as Router } from 'react-router-dom'
+
+import theme from './Theme'
+import ThemeContext from './components/Contexts/ThemeContext'
 
 import Routes from './Routes/Routes'
 
-const GlobalStyles = createGlobalStyle`
-    *{
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-        scroll-behavior: smooth;
-    }
-`
-const App = styled.div`
-    width: 100vw;
-    height: 100vh;
-    display: grid;
-    grid-template-rows: 70px 1fr;
-    grid-template-areas:
-        'header header header'
-        'first main second';
-`
-
 export default () => {
     return (
-        <App>
-            <GlobalStyles />
-
+        <ThemeContext theme={theme}>
             <Router>
                 <Routes />
             </Router>
-        </App>
+        </ThemeContext>
     )
 }

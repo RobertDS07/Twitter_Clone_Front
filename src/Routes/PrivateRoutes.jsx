@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 
 import { Redirect, Route } from 'react-router-dom'
 
-import LoggedContext from '../components/utils/LoggedContext'
+import LoggedContext from '../components/Contexts/LoggedContext'
 
 export default ({ Component, ...rest }) => {
     const { logged } = useContext(LoggedContext)

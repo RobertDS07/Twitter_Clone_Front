@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom'
 import PrivateRoute from './PrivateRoutes'
 import PublicRoutes from './PublicRoutes'
 
-import LoggedContext from '../components/utils/LoggedContext'
+import LoggedContext from '../components/Contexts/LoggedContext'
 
 import Header from '../components/Header'
 import Home from '../components/Home/index'
