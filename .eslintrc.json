@@ -17,6 +17,9 @@
         "sourceType": "module"
     },
     "plugins": ["react", "prettier"],
+    "globals": {
+        "process": true
+    },
     "rules": {
         "prettier/prettier": "error",
         "import/no-anonymous-default-export": 0,
