@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 
 import {
     AppBar,
@@ -32,33 +32,50 @@ const useStyles = makeStyles({
 export default () => {
     const { wrapper, header, avatar } = useStyles()
 
-    const { logged } = useContext(LoggedContext)
+    const { logged, setLogged } = useContext(LoggedContext)
 
-    const [anchor, setAnchor] = useState()
+    const [openAnchor, setOpenAnchor] = useState(false)
+    const anchorEl = useRef()
+
+    const getFirstLetter = identity => {
+        const parsedIdentity = JSON.parse(identity)
+
+        const { user } = parsedIdentity
+
+        return user.charAt(0).toUpperCase()
+    }
 
     return (
         <Grid item xs={12} className={wrapper}>
             <AppBar position="static" className={header}>
                 {logged && (
                     <>
-                        <IconButton onClick={e => setAnchor(e.currentTarget)}>
-                            <Avatar className={avatar}>R</Avatar>
+                        <IconButton
+                            ref={anchorEl}
+                            onClick={() => setOpenAnchor(true)}
+                        >
+                            <Avatar className={avatar}>
+                                {getFirstLetter(logged)}
+                            </Avatar>
                         </IconButton>
                         <Menu
-                            anchorEl={anchor}
+                            anchorEl={anchorEl.current}
+                            open={openAnchor}
+                            onClose={() => setOpenAnchor(false)}
                             keepMounted
-                            open={!!anchor}
-                            onClose={() => setAnchor()}
-                            anchorOrigin={{
-                                horizontal: 'right',
-                                vertical: 'bottom',
-                            }}
                             transformOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'right',
+                                vertical: -50,
+                                horizontal: 'center',
                             }}
                         >
-                            <MenuItem>Logout</MenuItem>
+                            <MenuItem
+                                onClick={() => {
+                                    localStorage.clear()
+                                    setLogged(false)
+                                }}
+                            >
+                                Logout
+                            </MenuItem>
                         </Menu>
                     </>
                 )}
