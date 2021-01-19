@@ -11,13 +11,15 @@ import {
 import { Field, Form } from 'react-final-form'
 import api from '../../services/api'
 import LoggedContext from '../Contexts/LoggedContext'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles({
     wrapper: {
         height: '500px',
     },
     paper: {
-        height: '200px',
+        height: '225px',
+        padding: '20px 0',
     },
     form: {
         height: '100%',
@@ -30,6 +32,8 @@ const useStyles = makeStyles({
 })
 
 export default () => {
+    const history = useHistory()
+
     const { paper, wrapper, form, submitButton } = useStyles()
 
     const { setAlert, setLogged } = useContext(LoggedContext)
@@ -44,18 +48,20 @@ export default () => {
                 `,
             })
 
-            const token = data.data.data.login
+            const user = data.data.data.login
 
-            if (!token)
+            if (!user)
                 throw new Error('Algo de errado ocorreu, tente novamente')
 
-            localStorage.setItem('token', token)
+            localStorage.setItem('identity', user)
 
-            setLogged(token)
+            setLogged(user)
         } catch (e) {
             console.log(e)
             setAlert({
-                message: e.response.data.errors[0].message || e.message,
+                message:
+                    (e.response && e.response.data.errors[0].message) ||
+                    e.message,
                 severity: 'error',
             })
         }
@@ -113,8 +119,11 @@ export default () => {
                                             color="primary"
                                             variant="text"
                                             style={{ marginTop: '5px' }}
+                                            onClick={() =>
+                                                history.push('/register')
+                                            }
                                         >
-                                            Register
+                                            create account
                                         </Button>
                                     </form>
                                 )}
