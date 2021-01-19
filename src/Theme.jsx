@@ -5,7 +5,7 @@ const theme = createMuiTheme({
         MuiCssBaseline: {
             '@global': {
                 body: {
-                    '*': {
+                    '& *': {
                         boxSizing: 'border-box',
                     },
                 },
