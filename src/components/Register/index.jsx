@@ -10,6 +10,8 @@ import {
 } from '@material-ui/core'
 import { Field, Form } from 'react-final-form'
 import LoggedContext from '../Contexts/LoggedContext'
+import { useHistory } from 'react-router-dom'
+import api from '../../services/api'
 
 const useStyles = makeStyles({
     wrapper: {
@@ -23,26 +25,50 @@ const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'column',
     },
-    submitButton: {
-        margin: '18px 0',
+    button: {
+        marginTop: '10px',
+        '&.lastButton': {
+            marginBottom: '10px',
+        },
     },
 })
 
 export default () => {
-    const { paper, wrapper, form, submitButton } = useStyles()
+    const history = useHistory()
 
-    const { setAlert } = useContext(LoggedContext)
+    const { paper, wrapper, form, button } = useStyles()
+
+    const { setAlert, setLogged } = useContext(LoggedContext)
 
     const handleRequest = async values => {
         try {
             if (values.password !== values.passwordConfirm)
                 throw new Error('Password must be the same')
 
-            await new Promise(resolve =>
-                setTimeout(resolve(console.log), 1000, values),
-            )
+            const data = await api.post('/graphql', {
+                query: `
+                    mutation{
+                        createUser(data:{name: "${values.name}" email: "${values.email}" password:"${values.password}"})
+                    }
+                `,
+            })
+
+            const user = data.data.data.createUser
+
+            if (!user)
+                throw new Error('Algo de errado ocorreu, tente novamente')
+
+            localStorage.setItem('identity', user)
+
+            setLogged(user)
         } catch (e) {
-            setAlert({ message: e.message, severity: 'warning' })
+            console.log(e)
+            setAlert({
+                message:
+                    (e.response && e.response.data.errors[0].message) ||
+                    e.message,
+                severity: 'error',
+            })
         }
     }
 
@@ -158,10 +184,18 @@ export default () => {
                                             color="primary"
                                             type="submit"
                                             variant="contained"
-                                            className={submitButton}
+                                            className={button}
                                             disabled={submitting}
                                         >
                                             Create account
+                                        </Button>
+                                        <Button
+                                            color="primary"
+                                            variant="text"
+                                            onClick={() => history.push('/')}
+                                            className={`${button} lastButton`}
+                                        >
+                                            Login
                                         </Button>
                                     </form>
                                 )}
