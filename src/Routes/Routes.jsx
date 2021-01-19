@@ -18,7 +18,7 @@ import NotFound from '../components/utils/NotFound'
 import Alert from '../components/utils/Alert'
 
 export default () => {
-    const [logged, setLogged] = useState(localStorage.getItem('token'))
+    const [logged, setLogged] = useState(localStorage.getItem('identity'))
     const [alert, setAlert] = useState(false)
 
     return (
